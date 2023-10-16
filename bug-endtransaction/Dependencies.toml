@@ -342,17 +342,25 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "java.jdbc"
+name = "mysql"
 version = "1.10.0"
 dependencies = [
+	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "lang.string"},
 	{org = "ballerina", name = "sql"},
 	{org = "ballerina", name = "time"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "java.jdbc", moduleName = "java.jdbc"}
+	{org = "ballerinax", packageName = "mysql", moduleName = "mysql"}
+]
+
+[[package]]
+org = "ballerinax"
+name = "mysql.driver"
+version = "1.5.0"
+modules = [
+	{org = "ballerinax", packageName = "mysql.driver", moduleName = "mysql.driver"}
 ]
 
 [[package]]
@@ -366,7 +374,8 @@ dependencies = [
 	{org = "ballerina", name = "task"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinai", name = "transaction"},
-	{org = "ballerinax", name = "java.jdbc"}
+	{org = "ballerinax", name = "mysql"},
+	{org = "ballerinax", name = "mysql.driver"}
 ]
 modules = [
 	{org = "dumindusameendra", packageName = "bug_endtransaction", moduleName = "bug_endtransaction"}

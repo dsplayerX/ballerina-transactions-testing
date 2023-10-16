@@ -1,23 +1,29 @@
+import ballerina/http;
 import ballerina/io;
 import ballerina/sql;
-import ballerinax/java.jdbc;
+// import ballerinax/java.jdbc;
 import ballerina/task;
-import ballerina/http;
+import ballerinax/mysql;
+import ballerinax/mysql.driver as _;
 
-sql:ConnectionPool pool = { 
-    maxOpenConnections: 1, 
+sql:ConnectionPool pool = {
+    maxOpenConnections: 1,
     maxConnectionLifeTime: 30,
     minIdleConnections: 0
 };
 
-final jdbc:Client testDB = check new jdbc:Client("jdbc:sqlite:test.db", connectionPool = pool);
+// final jdbc:Client testDB = check new jdbc:Client("jdbc:sqlite:test.db", connectionPool = pool);
+
+final mysql:Client testDB = check new (
+    host = "localhost", user = "root", password = "root", port = 3306, database = "test", connectionPool = pool
+);
 
 type WorldRecord record {|
     string|() world;
 |};
-
+e
 // set simulationError to true to get different stacktrace
-public isolated function dbTest(boolean simulateError = true) returns error? {
+public isolated function dbTest(boolean simulateError = false) returns error? {
     transaction {
         stream<WorldRecord, error?> result = testDB->query(`SELECT world FROM hello;`);
         check result.close();
@@ -52,11 +58,11 @@ public isolated class TestTask {
             count = self.counter.cloneReadOnly();
             self.counter += 1;
         }
-        io:println(string`Task: ${self.name},  Invocation:  ${count}`);
+        io:println(string `Task: ${self.name},  Invocation:  ${count}`);
 
         var err = trap dbTest();
 
-        if ! (err is ()) {
+        if !(err is ()) {
             io:println("Error in task " + self.name);
             io:println(err);
             io:println(err.stackTrace());
@@ -73,8 +79,7 @@ public isolated class TestTask {
     }
 }
 
-
-service / on new http:Listener(9097) {
+service / on new http:Listener(9096) {
     resource function get .() returns json {
         return {
             hello: "world"
@@ -82,18 +87,30 @@ service / on new http:Listener(9097) {
     }
 }
 
-
-public function main() {
+public function main() returns error? {
     var task1 = new TestTask("a    ");
     var task2 = new TestTask(" b   ");
     var task3 = new TestTask("  c  ");
     var task4 = new TestTask("   d ");
     var task5 = new TestTask("    e");
+    TestTask[] tasks = [task1, task2, task3, task4, task5];
 
     decimal interval = 0.1; // adjust to change error occurrence speed
-    task1.schedule(interval);
-    task2.schedule(interval);
-    task3.schedule(interval);
-    task4.schedule(interval);
-    task5.schedule(interval);
+    // task1.schedule(interval);
+    // task2.schedule(interval);
+    // task3.schedule(interval);
+    // task4.schedule(interval);
+    // task5.schedule(interval);
+
+    future<()>[] futures = [];
+
+    foreach var item in tasks {
+        var x = start item.schedule(interval);
+        futures.push(x);
+    }
+
+    foreach int item in 0 ..< futures.length() {
+        error? x = wait futures[item];
+        check x;
+    }
 }

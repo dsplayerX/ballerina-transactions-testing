@@ -7,7 +7,7 @@ distribution = "2201.7.2"
 [build-options]
 observabilityIncluded = true
 
-[[platform.java11.dependency]]
-artifactId="sqlite-jdbc"
-version="3.36.0.1"
-groupId="org.xerial"
+# [[platform.java11.dependency]]
+# artifactId="sqlite-jdbc"
+# version="3.36.0.1"
+# groupId="org.xerial"
