@@ -21,9 +21,9 @@ final mysql:Client testDB = check new (
 type WorldRecord record {|
     string|() world;
 |};
-e
+
 // set simulationError to true to get different stacktrace
-public isolated function dbTest(boolean simulateError = false) returns error? {
+public isolated function dbTest(boolean simulateError = true) returns error? {
     transaction {
         stream<WorldRecord, error?> result = testDB->query(`SELECT world FROM hello;`);
         check result.close();
@@ -88,12 +88,18 @@ service / on new http:Listener(9096) {
 }
 
 public function main() returns error? {
-    var task1 = new TestTask("a    ");
-    var task2 = new TestTask(" b   ");
-    var task3 = new TestTask("  c  ");
-    var task4 = new TestTask("   d ");
-    var task5 = new TestTask("    e");
-    TestTask[] tasks = [task1, task2, task3, task4, task5];
+    var task1 = new TestTask("a         ");
+    var task2 = new TestTask(" b        ");
+    var task3 = new TestTask("  c       ");
+    var task4 = new TestTask("   d      ");
+    var task5 = new TestTask("    e     ");
+    var task6 = new TestTask("     f    ");
+    var task7 = new TestTask("      g   ");
+    var task8 = new TestTask("       h  ");
+    var task9 = new TestTask("        i ");
+    var task10 = new TestTask("         j");
+
+    TestTask[] tasks = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10];
 
     decimal interval = 0.1; // adjust to change error occurrence speed
     // task1.schedule(interval);

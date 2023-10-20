@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.8.0-20230908-135700-74a59dff"
+distribution-version = "2201.8.0"
 
 [[package]]
 org = "ballerina"
@@ -84,10 +84,6 @@ dependencies = [
 	{org = "ballerina", name = "observe"},
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "url"}
-]
-modules = [
-	{org = "ballerina", packageName = "http", moduleName = "http"},
-	{org = "ballerina", packageName = "http", moduleName = "http.httpscerr"}
 ]
 
 [[package]]
@@ -176,6 +172,9 @@ name = "lang.runtime"
 version = "0.0.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
+]
+modules = [
+	{org = "ballerina", packageName = "lang.runtime", moduleName = "lang.runtime"}
 ]
 
 [[package]]
@@ -276,9 +275,6 @@ dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
 ]
-modules = [
-	{org = "ballerina", packageName = "task", moduleName = "task"}
-]
 
 [[package]]
 org = "ballerina"
@@ -358,26 +354,25 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "mysql.driver"
-version = "1.5.0"
+version = "1.6.0"
 modules = [
 	{org = "ballerinax", packageName = "mysql.driver", moduleName = "mysql.driver"}
 ]
 
 [[package]]
 org = "dumindusameendra"
-name = "bug_endtransaction"
+name = "on_fail_not_triggered"
 version = "0.1.0"
 dependencies = [
-	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "lang.runtime"},
 	{org = "ballerina", name = "sql"},
-	{org = "ballerina", name = "task"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinai", name = "transaction"},
 	{org = "ballerinax", name = "mysql"},
 	{org = "ballerinax", name = "mysql.driver"}
 ]
 modules = [
-	{org = "dumindusameendra", packageName = "bug_endtransaction", moduleName = "bug_endtransaction"}
+	{org = "dumindusameendra", packageName = "on_fail_not_triggered", moduleName = "on_fail_not_triggered"}
 ]
 
