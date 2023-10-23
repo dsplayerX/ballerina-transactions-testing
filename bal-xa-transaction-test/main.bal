@@ -22,8 +22,6 @@ public function main() returns error? {
 
         var e1 = check dbClient1->execute(`INSERT INTO EMPLOYEE(NAME) VALUES ('John')`);
 
-        checkpanic dbClient2.close();
-
         var e2 = check dbClient2->execute(`INSERT INTO SALARY VALUES (1, 1000.00)`);
 
         var commitResult = commit;
