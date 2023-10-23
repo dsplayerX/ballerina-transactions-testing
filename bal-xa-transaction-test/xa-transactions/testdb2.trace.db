@@ -1,0 +1,15 @@
+2023-10-23 10:58:17 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE[*] FLOAT)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE FLOAT) [42001-206]
+2023-10-23 10:59:27 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE[*] FLOAT)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE FLOAT) [42001-206]
+2023-10-23 11:00:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE[*] DECIMAL(10,2))"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE DECIMAL(10,2)) [42001-206]
+2023-10-23 11:02:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE[*] FLOAT)"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE FLOAT) [42001-206]
+2023-10-23 11:02:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE[*] DECIMAL(10,2))"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS SALARY (ID INT, VALUE DECIMAL(10,2)) [42001-206]
