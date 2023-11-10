@@ -1,6 +1,8 @@
 import ballerina/io;
 import ballerinax/java.jdbc;
+import ballerina/os;
 
+// os.setEnv("JDBC_DATASOURCES", true);
 string xaDatasourceName = "org.h2.jdbcx.JdbcDataSource";
 
 public function main() returns error? {
