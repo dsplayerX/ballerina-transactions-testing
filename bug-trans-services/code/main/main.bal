@@ -1,51 +1,52 @@
 import ballerina/http;
 import ballerina/io;
 
+FooClient fooClient = new FooClient(9090);
+
 service / on new http:Listener(8080) {
-    resource function get testing() returns error? {
+
+    resource function get doTransaction() returns error? {
         transaction {
             transaction:onCommit(commitDone);
             transaction:onRollback(rollbackDone);
-            boolean successful = callRemoteService();
-            if (successful) {
-                rollback;
-            } else {
-                check commit;
-            }
+            check callRemoteService();
+            check commit;
         }
+        string response = check fooClient->bar();
+        io:println(response);
+
     }
 }
 
-function callRemoteService() returns boolean {
-    http:Client|error httpClient;
+public client class FooClient {
 
-    do {
-        httpClient = check new ("http://localhost:9090");
-    } on fail {
-        return false;
+    public http:Client httpClient;
+
+    public function init(int port) {
+        self.httpClient = checkpanic new ("http://localhost:9090");
     }
 
-    if (httpClient is error) {
-        io:println("> Found unexpected output type: " + httpClient.toString());
-        return false;
+    transactional remote function foo() returns @tainted http:Response|error {
+        return self.httpClient->get("/updateDb", targetType = http:Response);
     }
 
-    http:Response|error response = httpClient->get("/updatedb");
-    if (response is error) {
-        io:println("> Found unexpected output type: " + response.toString());
-        return false;
-    } else {
-        var x = response.getTextPayload();
-        io:println("> ", response.statusCode, " ", response.reasonPhrase);
-        io:println("> Response: ", x);
-        return true;
+    remote function bar() returns @tainted string|error {
+        return self.httpClient->get("/getAllRecords", targetType = string);
     }
+}
+
+transactional function callRemoteService() returns error? {
+    http:Response response = check fooClient->foo();
+    io:println("Response from remote service: ", response.statusCode, " ", response.reasonPhrase);
+    // http:Client httpClient = check new ("http://localhost:9090");
+    // http:Response response = check httpClient->get("/updateDb");
+    // io:println("Response from remote service: ", response.statusCode, " ", response.reasonPhrase);
 }
 
 isolated function commitDone('transaction:Info info) {
-    io:println("> Successfully committed.");
+    io:println("> Initiator committed.");
 }
 
 isolated function rollbackDone(transaction:Info info, error? cause, boolean willRetry) {
-    io:println("> Successfully rollbacked.");
+    io:println("> Initiaor rollbacked.");
 }
