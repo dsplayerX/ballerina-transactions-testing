@@ -21,7 +21,7 @@ service / on new http:Listener(9090) {
     // private jdbc:Client testDB;
     function init() returns error? {
         self.testDB = check new (host = "localhost",
-            user = "root", password = "root123",
+            user = "root", password = "my-secret-pw",
             port = 3308, database = "test",
             connectionPool = pool,
             options = {useXADatasource: true}
@@ -29,7 +29,7 @@ service / on new http:Listener(9090) {
 
         // self.testDB = check new jdbc:Client("jdbc:h2:./h2/test.db;AUTOCOMMIT=OFF", connectionPool = pool);
         // sql:ExecutionResult _ = check self.testDB->execute(`CREATE DATABASE IF NOT EXISTS test`);
-        // sql:ExecutionResult _ = check self.testDB->execute(`CREATE TABLE IF NOT EXISTS test.test (id INTEGER PRIMARY KEY AUTO_INCREMENT, hello VARCHAR(255) NOT NULL)`);
+        sql:ExecutionResult _ = check self.testDB->execute(`CREATE TABLE IF NOT EXISTS test.test (id INTEGER PRIMARY KEY AUTO_INCREMENT, hello VARCHAR(255) NOT NULL)`);
 
         io:println("Database initialized.");
     }

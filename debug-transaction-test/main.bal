@@ -37,7 +37,6 @@ public function main() returns error? {
 
     sql:ParameterizedQuery insertQuery1 = `INSERT INTO m1.test1 (hello) VALUES ('world')`;
     sql:ParameterizedQuery insertQuery2 = `INSERT INTO m2.test3 (hello) VALUES ('world')`;
-    sql:ParameterizedQuery updateQuery = `UPDATE m1.test1 SET hello = 'goodbye' WHERE id = 1`;
 
     transaction {
         transaction:onCommit(commitDone);
@@ -50,10 +49,14 @@ public function main() returns error? {
         io:println("Affected row count: ", execResult2.affectedRowCount);
         io:println("Inserted ID: ", execResult2.lastInsertId);
 
-        sql:ExecutionResult execResult3 = check localDB->execute(updateQuery);
+        sql:ParameterizedQuery updateQuery = `UPDATE m2.test3 SET hello = 'goodbye' WHERE id = ${execResult2.lastInsertId}`;
+
+        sql:ExecutionResult execResult3 = check dockerDB->execute(updateQuery);
         io:println("Affected row count: ", execResult3.affectedRowCount);
 
-        panicAll();
+
+        // panicAll();
+
         check commit;
 
         // if (execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0 || execResult3.affectedRowCount == 0) {
@@ -65,12 +68,13 @@ public function main() returns error? {
 
 }
 
-transactional function panicAll() {
+ isolated function panicAll() {
     // panic "Panic!";
     divideByZero();
 }
 
 isolated function commitDone('transaction:Info info) {
+    panicAll();
     io:println("> TM committed.");
 }
 
@@ -78,7 +82,7 @@ isolated function rollbackDone(transaction:Info info, error? cause, boolean will
     io:println("> TM rollbacked.");
 }
 
-function divideByZero() = @java:Method {
+isolated function divideByZero() = @java:Method {
 	name: "divideByZero",
 	'class: "a.b.c.Foo"
 } external;
