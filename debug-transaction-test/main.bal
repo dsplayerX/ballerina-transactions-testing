@@ -1,8 +1,8 @@
 import ballerina/io;
+import ballerina/jballerina.java;
 import ballerina/sql;
 import ballerinax/mysql;
 import ballerinax/mysql.driver as _;
-import ballerina/jballerina.java;
 
 sql:ConnectionPool pool = {
     maxOpenConnections: 5,
@@ -19,7 +19,7 @@ public function main() returns error? {
     // Initialize the MySQL Database Clients.
     mysql:Client localDB = check new (host = "localhost",
         user = "root", password = "root",
-        port = 3306, database = "m1",
+        port = 3306, database = "mA",
         connectionPool = pool,
         options = {useXADatasource: true}
     );
@@ -35,7 +35,8 @@ public function main() returns error? {
 
     io:println("Database 2 initialized.");
 
-    sql:ParameterizedQuery insertQuery1 = `INSERT INTO m1.test1 (hello) VALUES ('world')`;
+    sql:ParameterizedQuery insertQuery1 = `INSERT INTO mA.test1 (hello) VALUES ('world')`;
+
     sql:ParameterizedQuery insertQuery2 = `INSERT INTO m2.test3 (hello) VALUES ('world')`;
 
     transaction {
@@ -45,15 +46,18 @@ public function main() returns error? {
         io:println("Affected row count: ", execResult1.affectedRowCount);
         io:println("Inserted ID: ", execResult1.lastInsertId);
 
+        // sql:ParameterizedQuery deleteQuery1 = `DELETE FROM mA.test1 WHERE id = ${execResult1.lastInsertId}`;
+        // sql:ExecutionResult deleteResult = check localDB->execute(deleteQuery1);
+        // io:println("Affected row count: ", deleteResult.affectedRowCount);
+
         sql:ExecutionResult execResult2 = check dockerDB->execute(insertQuery2);
         io:println("Affected row count: ", execResult2.affectedRowCount);
         io:println("Inserted ID: ", execResult2.lastInsertId);
 
-        sql:ParameterizedQuery updateQuery = `UPDATE m2.test3 SET hello = 'goodbye' WHERE id = ${execResult2.lastInsertId}`;
+        sql:ParameterizedQuery updateQuery = `UPDATE m2.test3 SET hello = 'potter' WHERE id = ${execResult2.lastInsertId}`;
 
         sql:ExecutionResult execResult3 = check dockerDB->execute(updateQuery);
         io:println("Affected row count: ", execResult3.affectedRowCount);
-
 
         // panicAll();
 
@@ -68,13 +72,13 @@ public function main() returns error? {
 
 }
 
- isolated function panicAll() {
+isolated function panicAll() {
     // panic "Panic!";
     divideByZero();
 }
 
 isolated function commitDone('transaction:Info info) {
-    panicAll();
+    // panicAll();
     io:println("> TM committed.");
 }
 
@@ -83,6 +87,6 @@ isolated function rollbackDone(transaction:Info info, error? cause, boolean will
 }
 
 isolated function divideByZero() = @java:Method {
-	name: "divideByZero",
-	'class: "a.b.c.Foo"
+name: "divideByZero",
+'class: "a.b.c.Foo"
 } external;
