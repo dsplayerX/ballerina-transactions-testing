@@ -44,8 +44,8 @@ service / on new http:Listener(9090) {
         stopSqlServer = stopSql;
         if (!stopSqlServer) {
             _ = check startServ();
+            io:println("Started SQL server...");
         }
-        io:println("Started SQL server...");
         crashBeforeCommit = crashIt;
         io:println("Crash before commit: ", crashBeforeCommit);
         io:println("Stop SQL server: ", stopSqlServer);
@@ -74,7 +74,6 @@ service / on new http:Listener(9090) {
             sql:ExecutionResult execResult3 = check self.dockerDB->execute(updateQuery);
             io:println("Affected row count: ", execResult3.affectedRowCount);
 
-            // panicAll();
             if (execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0 || execResult3.affectedRowCount == 0) {
                 io:println("Rolling back...");
                 rollback;
@@ -88,7 +87,7 @@ service / on new http:Listener(9090) {
         io:println("SQL started.");
         io:println("Done.");
 
-        return "done";
+        return "transaction done";
     }
 
     resource function get getCrash() returns boolean|error {
