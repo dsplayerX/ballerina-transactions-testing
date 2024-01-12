@@ -1,0 +1,8 @@
+[package]
+org = "dumindusameendra"
+name = "bug_distribution_tx_fail_41883"
+version = "0.1.0"
+distribution = "2201.8.2"
+
+[build-options]
+observabilityIncluded = true

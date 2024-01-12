@@ -1,0 +1,61 @@
+Subject: [PATCH] fix_41948 patch1
+---
+Index: bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionLocalContext.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionLocalContext.java b/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionLocalContext.java
+--- a/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionLocalContext.java	(revision 28ddd90eb8b9eb9628df788733746f68bda59c0b)
++++ b/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionLocalContext.java	(date 1704698632390)
+@@ -153,6 +153,7 @@
+ 
+     public void notifyAbortAndClearTransaction(String transactionBlockId) {
+         transactionContextStore.clear();
++        transactionResourceManager.endXATransaction(globalTransactionId, transactionBlockId, true);
+         transactionResourceManager.notifyAbort(globalTransactionId, transactionBlockId);
+     }
+ 
+Index: bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionResourceManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionResourceManager.java b/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionResourceManager.java
+--- a/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionResourceManager.java	(revision 28ddd90eb8b9eb9628df788733746f68bda59c0b)
++++ b/bvm/ballerina-runtime/src/main/java/io/ballerina/runtime/transactions/TransactionResourceManager.java	(date 1704781285130)
+@@ -62,6 +62,7 @@
+ import static io.ballerina.runtime.transactions.TransactionConstants.TRANSACTION_PACKAGE_ID;
+ import static io.ballerina.runtime.transactions.TransactionConstants.TRANSACTION_PACKAGE_NAME;
+ import static io.ballerina.runtime.transactions.TransactionConstants.TRANSACTION_PACKAGE_VERSION;
++import static javax.transaction.xa.XAResource.TMFAIL;
+ import static javax.transaction.xa.XAResource.TMNOFLAGS;
+ import static javax.transaction.xa.XAResource.TMSUCCESS;
+ 
+@@ -245,7 +246,7 @@
+      */
+     //TODO:Comment for now, might need it for distributed transactions.
+     public boolean prepare(String transactionId, String transactionBlockId) {
+-        endXATransaction(transactionId, transactionBlockId);
++        endXATransaction(transactionId, transactionBlockId, false);
+         if (transactionManagerEnabled) {
+             return true;
+         }
+@@ -541,7 +542,7 @@
+      * @param transactionId      the global transaction id
+      * @param transactionBlockId the block id of the transaction
+      */
+-    void endXATransaction(String transactionId, String transactionBlockId) {
++    void endXATransaction(String transactionId, String transactionBlockId, boolean abortOnly) {
+         String combinedId = generateCombinedTransactionId(transactionId, transactionBlockId);
+         if (transactionManagerEnabled) {
+             Transaction trx = trxRegistry.get(combinedId);
+@@ -569,7 +570,7 @@
+                     try {
+                         XAResource xaResource = ctx.getXAResource();
+                         if (xaResource != null) {
+-                            ctx.getXAResource().end(xid, TMSUCCESS);
++                            xaResource.end(xid, abortOnly ? TMFAIL : TMSUCCESS);
+                         }
+                     } catch (XAException e) {
+                         log.error("error in ending XA transaction " + transactionId + ":" + e.getMessage(), e);

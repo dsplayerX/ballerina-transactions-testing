@@ -19,6 +19,8 @@ type WorldRecord record {|
 boolean crashBeforeCommit = false;
 boolean stopSqlServer = false;
 
+int cellId = 8;
+
 service / on new http:Listener(9090) {
     final mysql:Client localDB;
     final mysql:Client dockerDB;
@@ -60,37 +62,64 @@ service / on new http:Listener(9090) {
         io:println("Crash before commit: ", crashBeforeCommit);
         io:println("Stop SQL server: ", stopSqlServer);
 
-        sql:ParameterizedQuery insertQuery1 = `INSERT INTO mA.test1 (hello) VALUES ('world')`;
-        sql:ParameterizedQuery insertQuery2 = `INSERT INTO m2.test3 (hello) VALUES ('world')`;
+        sql:ParameterizedQuery updateQuery1 = `UPDATE mA.test1 SET hello = 'nubinubi' WHERE id = ${cellId}`;
+        sql:ParameterizedQuery updateQuery2 = `UPDATE m2.test3 SET hello = 'beeeeeee' WHERE id = ${cellId}`;
 
         io:println("Running transaction...");
         transaction {
             transaction:onCommit(commitDone);
             transaction:onRollback(rollbackDone);
-            sql:ExecutionResult execResult1 = check self.localDB->execute(insertQuery1);
+            sql:ExecutionResult execResult1 = check self.localDB->execute(updateQuery1);
             io:println("Affected row count: ", execResult1.affectedRowCount);
-            io:println("Inserted ID: ", execResult1.lastInsertId);
-
-            // sql:ParameterizedQuery deleteQuery1 = `DELETE FROM mA.test1 WHERE id = ${execResult1.lastInsertId}`;
-            // sql:ExecutionResult deleteResult = check self.localDB->execute(deleteQuery1);
-            // io:println("Affected row count: ", deleteResult.affectedRowCount);
-
-            sql:ExecutionResult execResult2 = check self.dockerDB->execute(insertQuery2);
+            sql:ExecutionResult execResult2 = check self.dockerDB->execute(updateQuery2);
             io:println("Affected row count: ", execResult2.affectedRowCount);
-            io:println("Inserted ID: ", execResult2.lastInsertId);
 
-            sql:ParameterizedQuery updateQuery = `UPDATE m2.test3 SET hello = 'potter' WHERE id = ${execResult2.lastInsertId}`;
+            if (rollIt == true || execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0) {
+                io:println("Rolling back...");
+                rollback;
+            } else {
+                io:println("Committing...");
+                check commit;
+            }
+        }
+        io:println("Transaction done.");
+        io:println("Starting SQL again...");
+        _ = check startServ();
+        io:println("SQL started.");
+        io:println("Done.");
 
-            sql:ExecutionResult execResult3 = check self.dockerDB->execute(updateQuery);
-            io:println("Affected row count: ", execResult3.affectedRowCount);
+        return "transaction done";
+    }
 
-            // if (execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0 || execResult3.affectedRowCount == 0 || rollIt == true) {
-            //     io:println("Rolling back...");
-            //     rollback;
-            // } else {
-            check commit;
-            // }
+    resource function get trans23(boolean crashIt, boolean stopSql, boolean rollIt) returns string|error {
+        stopSqlServer = stopSql;
+        if (!stopSqlServer) {
+            _ = check startServ();
+            io:println("Started SQL server...");
+        }
+        crashBeforeCommit = crashIt;
+        io:println("Crash before commit: ", crashBeforeCommit);
+        io:println("Stop SQL server: ", stopSqlServer);
 
+        sql:ParameterizedQuery updateQuery1 = `UPDATE mA.test1 SET hello = 'vs' WHERE id = ${cellId}`;
+        sql:ParameterizedQuery updateQuery2 = `UPDATE m2.test3 SET hello = 'vs' WHERE id = ${cellId}`;
+
+        io:println("Running transaction...");
+        transaction {
+            transaction:onCommit(commitDone);
+            transaction:onRollback(rollbackDone);
+            sql:ExecutionResult execResult1 = check self.localDB->execute(updateQuery1);
+            io:println("Affected row count: ", execResult1.affectedRowCount);
+            sql:ExecutionResult execResult2 = check self.dockerDB->execute(updateQuery2);
+            io:println("Affected row count: ", execResult2.affectedRowCount);
+
+            if (rollIt == true || execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0) {
+                io:println("Rolling back...");
+                rollback;
+            } else {
+                io:println("Committing...");
+                check commit;
+            }
         }
         io:println("Transaction done.");
         io:println("Starting SQL again...");

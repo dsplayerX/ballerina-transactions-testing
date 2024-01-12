@@ -35,9 +35,9 @@ public function main() returns error? {
 
     io:println("Database 2 initialized.");
 
-    sql:ParameterizedQuery insertQuery1 = `INSERT INTO mA.test1 (hello) VALUES ('world')`;
+    sql:ParameterizedQuery insertQuery1 = `INSERT INTO mA.test1 (hello) VALUES ('dubidubi')`;
 
-    sql:ParameterizedQuery insertQuery2 = `INSERT INTO m2.test3 (hello) VALUES ('world')`;
+    sql:ParameterizedQuery insertQuery2 = `INSERT INTO m2.test3 (hello) VALUES ('dabadaba')`;
 
     transaction {
         transaction:onCommit(commitDone);
@@ -54,20 +54,24 @@ public function main() returns error? {
         io:println("Affected row count: ", execResult2.affectedRowCount);
         io:println("Inserted ID: ", execResult2.lastInsertId);
 
-        sql:ParameterizedQuery updateQuery = `UPDATE m2.test3 SET hello = 'potter' WHERE id = ${execResult2.lastInsertId}`;
+        sql:ParameterizedQuery updateQuery = `UPDATE m2.test3 SET hello = 'chipichipi' WHERE id = ${execResult2.lastInsertId}`;
 
         sql:ExecutionResult execResult3 = check dockerDB->execute(updateQuery);
         io:println("Affected row count: ", execResult3.affectedRowCount);
 
         // panicAll();
 
-        check commit;
+        // check commit;
 
         // if (execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0 || execResult3.affectedRowCount == 0) {
         //     io:println("Rolling back...");
         //     rollback;
         // } else {
+        //     check commit;
         // }
+
+        check commit;
+
     }
 
 }

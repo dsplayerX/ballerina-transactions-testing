@@ -108,15 +108,17 @@ public function main() returns error? {
     // task4.schedule(interval);
     // task5.schedule(interval);
 
-    future<()>[] futures = [];
+    lock {
+        future<()>[] futures = [];
 
-    foreach var item in tasks {
-        var x = start item.schedule(interval);
-        futures.push(x);
-    }
+        foreach var item in tasks {
+            var x = start item.schedule(interval);
+            futures.push(x);
+        }
 
-    foreach int item in 0 ..< futures.length() {
-        error? x = wait futures[item];
-        check x;
+        foreach int item in 0 ..< futures.length() {
+            error? x = wait futures[item];
+            check x;
+        }
     }
 }
