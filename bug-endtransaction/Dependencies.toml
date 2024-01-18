@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.8.2"
+distribution-version = "2201.8.0"
 
 [[package]]
 org = "ballerina"
@@ -342,25 +342,17 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "mysql"
+name = "java.jdbc"
 version = "1.11.0"
 dependencies = [
-	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "lang.string"},
 	{org = "ballerina", name = "sql"},
 	{org = "ballerina", name = "time"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "mysql", moduleName = "mysql"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "mysql.driver"
-version = "1.5.0"
-modules = [
-	{org = "ballerinax", packageName = "mysql.driver", moduleName = "mysql.driver"}
+	{org = "ballerinax", packageName = "java.jdbc", moduleName = "java.jdbc"}
 ]
 
 [[package]]
@@ -374,8 +366,7 @@ dependencies = [
 	{org = "ballerina", name = "task"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinai", name = "transaction"},
-	{org = "ballerinax", name = "mysql"},
-	{org = "ballerinax", name = "mysql.driver"}
+	{org = "ballerinax", name = "java.jdbc"}
 ]
 modules = [
 	{org = "dumindusameendra", packageName = "bug_endtransaction", moduleName = "bug_endtransaction"}

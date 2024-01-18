@@ -1,10 +1,10 @@
 import ballerina/http;
 import ballerina/io;
 import ballerina/sql;
-// import ballerinax/java.jdbc;
+import ballerinax/java.jdbc;
 import ballerina/task;
-import ballerinax/mysql;
-import ballerinax/mysql.driver as _;
+// import ballerinax/mysql;
+// import ballerinax/mysql.driver as _;
 
 sql:ConnectionPool pool = {
     maxOpenConnections: 1,
@@ -12,11 +12,11 @@ sql:ConnectionPool pool = {
     minIdleConnections: 0
 };
 
-// final jdbc:Client testDB = check new jdbc:Client("jdbc:sqlite:test.db", connectionPool = pool);
+final jdbc:Client testDB = check new jdbc:Client("jdbc:sqlite:test.db", connectionPool = pool);
 
-final mysql:Client testDB = check new (
-    host = "localhost", user = "root", password = "root", port = 3306, database = "test", connectionPool = pool
-);
+// final mysql:Client testDB = check new (
+//     host = "localhost", user = "root", password = "root", port = 3306, database = "test", connectionPool = pool
+// );
 
 type WorldRecord record {|
     string|() world;
@@ -101,14 +101,13 @@ public function main() returns error? {
 
     TestTask[] tasks = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10];
 
-    decimal interval = 0.001; // adjust to change error occurrence speed
+    decimal interval = 15; // adjust to change error occurrence speed
     // task1.schedule(interval);
     // task2.schedule(interval);
     // task3.schedule(interval);
     // task4.schedule(interval);
     // task5.schedule(interval);
 
-    lock {
         future<()>[] futures = [];
 
         foreach var item in tasks {
@@ -120,5 +119,4 @@ public function main() returns error? {
             error? x = wait futures[item];
             check x;
         }
-    }
 }
