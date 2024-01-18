@@ -1,0 +1,23 @@
+[
+  {
+    "name": "com.sun.jndi.ldap.LdapCtxFactory",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.ballerina.stdlib.auth.ldap.SslSocketFactory"
+  },
+  {
+    "name": "javax.net.ssl.SSLSocketFactory",
+    "methods": [
+      {
+        "name": "getDefault",
+        "parameterTypes": []
+      }
+    ]
+  }
+]

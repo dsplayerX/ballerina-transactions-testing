@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: dumindusameendra.test_decompile.0.$_init
+
