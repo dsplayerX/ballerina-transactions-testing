@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.ws.commons.axiom</groupId>
+        <artifactId>axiom</artifactId>
+        <version>1.4.0</version>
+    </parent>
+
+    <artifactId>axiom-api</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Axiom API</name>
+    <description>The Axiom API</description>
+    <url>http://ws.apache.org/axiom/</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>base64-utils</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.james</groupId>
+            <artifactId>apache-mime4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.framework</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.util.tracker</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xml-truth</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>testutils</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xml-testsuite</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>soap-testsuite</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jaxp-testsuite</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency><!-- We need this in the StAX dialect for Woodstox 4 -->
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>stax2-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xml-utils</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service-annotations</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>buildutils-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>post-process-classes</id>
+                        <goals>
+                            <goal>post-process-classes</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-process-sources-jar</id>
+                        <goals>
+                            <goal>post-process-sources-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>org/apache/axiom/util/stax/dialect/DialectTestSuite.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>org/apache/axiom/util/stax/dialect/*Test.java</exclude>
+                    </excludes>
+                    <!-- Keep heap size small. We have some unit tests that deal with volumes
+                         of data proportional to the heap size (to test that Axiom is streaming
+                         the data instead of loading it into memory). Obviously, the execution time of
+                         these tests also are proportional to the heap size. To accelerate the execution
+                         of the tests, we should use a heap size as small as possible. -->
+                    <argLine>${argLine} -Xms64m -Xmx64m</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Private-Package />
+                        <Export-Package>
+                            org.apache.axiom.*;-split-package:=merge-first;-noimport:=true
+                        </Export-Package>
+                        <Import-Package>
+                            javax.mail.util;resolution:=optional,
+                            org.jaxen.*;resolution:=optional,
+                            org.codehaus.stax2;resolution:=optional,
+                            org.apache.james.mime4j.*;version="${range;[==,=+)}",
+                            *
+                        </Import-Package>
+                        <Bundle-Activator>org.apache.axiom.locator.Activator</Bundle-Activator>
+                        <!-- On the Eclipse platform, bundles are initially not started. However,
+                             bundles with lazy activation are started automatically when the first
+                             class is loaded. Using this activation policy ensures that Axiom can
+                             be used out of the box with Eclipse plug-ins (for the IDE or in an RCP
+                             application). -->
+                        <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.veithen.phos</groupId>
+                <artifactId>enforcer-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <layers>
+                                <layer>
+                                    <packages>
+                                        <value>org.apache.james.mime4j</value>
+                                    </packages>
+                                    <visibilityRules>
+                                        <value>
+                                            <packages>
+                                                <value>org.apache.axiom.mime</value>
+                                            </packages>
+                                            <allowPublicUsage>false</allowPublicUsage>
+                                        </value>
+                                    </visibilityRules>
+                                </layer>
+                                <layer>
+                                    <!-- The attachments API is considered a legacy API and shouldn't be used anywhere. -->
+                                    <packages>
+                                        <value>org.apache.axiom.attachments</value>
+                                    </packages>
+                                </layer>
+                                <layer>
+                                    <packages>
+                                        <value>org.apache.axiom.util</value>
+                                    </packages>
+                                    <visibilityRules>
+                                        <value>
+                                            <allowPublicUsage>false</allowPublicUsage>
+                                        </value>
+                                    </visibilityRules>
+                                </layer>
+                                <layer>
+                                    <!-- Commons Logging is used internally but should not be used in the public API. -->
+                                    <packages>
+                                        <value>org.apache.commons.logging</value>
+                                    </packages>
+                                    <visibilityRules>
+                                        <value>
+                                            <allowPublicUsage>false</allowPublicUsage>
+                                        </value>
+                                    </visibilityRules>
+                                </layer>
+                            </layers>
+                            <ignore>
+                                <!-- Bad API design: a public API shouldn't depend on classes in an impl package in its interface -->
+                                org.apache.axiom.attachments.lifecycle.LifecycleManager -&gt; org.apache.axiom.attachments.lifecycle.impl.FileAccessor,
+                                <!-- TODO -->
+                                org.apache.axiom.om.impl.OMMultipartWriter -&gt; org.apache.axiom.attachments.ConfigurableDataHandler,
+                                <!-- o.a.a.soap should be a layer on top of o.a.a.om -->
+                                org.apache.axiom.om.OMAbstractFactory -&gt; org.apache.axiom.soap.SOAPFactory,
+                                org.apache.axiom.om.OMMetaFactory -&gt; org.apache.axiom.soap.SOAPFactory,
+                                org.apache.axiom.om.OMMetaFactorySPI -&gt; org.apache.axiom.soap.SOAPModelBuilder,
+                                org.apache.axiom.om.OMXMLBuilderFactory -&gt; org.apache.axiom.soap.SOAPFactory,
+                                org.apache.axiom.om.OMXMLBuilderFactory -&gt; org.apache.axiom.soap.SOAPMessage,
+                                org.apache.axiom.om.OMXMLBuilderFactory -&gt; org.apache.axiom.soap.SOAPModelBuilder,
+                                org.apache.axiom.om.OMXMLBuilderFactory -&gt; org.apache.axiom.soap.SOAPProcessingException,
+                                org.apache.axiom.om.OMXMLBuilderFactory -&gt; org.apache.axiom.soap.SOAPVersion,
+                                <!-- The public API shouldn't depend on classes in o.a.a.om.util -->
+                                org.apache.axiom.om.OMMetaFactorySPI -&gt; org.apache.axiom.om.util.StAXParserConfiguration,
+                                org.apache.axiom.om.OMXMLBuilderFactory -&gt; org.apache.axiom.om.util.StAXParserConfiguration,
+                                org.apache.axiom.om.OMOutputFormat -&gt; org.apache.axiom.om.util.StAXWriterConfiguration,
+                                <!-- StAXUtils is in the wrong package (should be o.a.a.util.stax) -->
+                                org.apache.axiom.om.ds.AbstractPushOMDataSource -&gt; org.apache.axiom.om.util.StAXUtils,
+                                org.apache.axiom.om.ds.BlobOMDataSource -&gt; org.apache.axiom.om.util.StAXUtils,
+                                org.apache.axiom.om.ds.StringOMDataSource -&gt; org.apache.axiom.om.util.StAXUtils,
+                                <!-- Incorrect layering -->
+                                org.apache.axiom.om.util.StAXParserConfiguration -&gt; org.apache.axiom.util.stax.dialect.StAXDialect
+                            </ignore>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

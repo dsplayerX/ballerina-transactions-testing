@@ -1,0 +1,21 @@
+JarIndex-Version: 1.0
+
+jboss-marshalling-2.0.5.Final.jar
+META-INF
+META-INF/maven
+META-INF/maven/org.jboss.marshalling
+META-INF/maven/org.jboss.marshalling/jboss-marshalling
+META-INF/versions
+META-INF/versions/9
+META-INF/versions/9/org
+META-INF/versions/9/org/jboss
+META-INF/versions/9/org/jboss/marshalling
+META-INF/versions/9/org/jboss/marshalling/reflect
+org
+org/jboss
+org/jboss/marshalling
+org/jboss/marshalling/_private
+org/jboss/marshalling/cloner
+org/jboss/marshalling/reflect
+org/jboss/marshalling/util
+
