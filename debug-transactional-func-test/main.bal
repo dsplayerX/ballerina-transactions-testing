@@ -36,7 +36,8 @@ service / on new http:Listener(9090) {
             options = {useXADatasource: true,
             ssl: {
                 allowPublicKeyRetrieval: true
-            }}
+            }
+            }
         );
         io:println("Database 1 initialized.");
 
@@ -47,7 +48,8 @@ service / on new http:Listener(9090) {
             options = {useXADatasource: true,
             ssl: {
             allowPublicKeyRetrieval: true
-            }}
+            }
+            }
         );
         io:println("Database 2 initialized.");
     }
@@ -206,3 +208,5 @@ isolated function divideByZero() = @java:Method {
     name: "divideByZero",
     'class: "a.b.c.Foo"
 } external;
+
+

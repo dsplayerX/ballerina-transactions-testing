@@ -63,14 +63,14 @@ public function main() returns error? {
 
         // check commit;
 
-        // if (execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0 || execResult3.affectedRowCount == 0) {
-        //     io:println("Rolling back...");
-        //     rollback;
-        // } else {
-        //     check commit;
-        // }
+        if (execResult1.affectedRowCount == 0 || execResult2.affectedRowCount == 0 || execResult3.affectedRowCount == 0) {
+            io:println("Rolling back...");
+            rollback;
+        } else {
+            check commit;
+        }
 
-        check commit;
+        // check commit;
 
     }
 

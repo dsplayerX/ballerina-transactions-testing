@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.8.0"
+distribution-version = "2201.8.4"
 
 [[package]]
 org = "ballerina"
@@ -33,7 +33,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "constraint"
-version = "1.5.0"
+version = "1.4.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -61,7 +61,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.10.5"
+version = "2.10.6"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -236,7 +236,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "observe"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -248,6 +248,20 @@ version = "1.8.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"}
+]
+
+[[package]]
+org = "ballerina"
+name = "sql"
+version = "1.11.1"
+dependencies = [
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "lang.object"},
+	{org = "ballerina", name = "time"}
+]
+modules = [
+	{org = "ballerina", packageName = "sql", moduleName = "sql"}
 ]
 
 [[package]]
@@ -320,15 +334,32 @@ modules = [
 ]
 
 [[package]]
+org = "ballerinax"
+name = "postgresql"
+version = "1.11.0"
+dependencies = [
+	{org = "ballerina", name = "crypto"},
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "sql"},
+	{org = "ballerina", name = "time"}
+]
+modules = [
+	{org = "ballerinax", packageName = "postgresql", moduleName = "postgresql"}
+]
+
+[[package]]
 org = "dumindusameendra"
-name = "test_decompile"
+name = "postgres_transaction_test"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "sql"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinai", name = "transaction"}
+	{org = "ballerinai", name = "transaction"},
+	{org = "ballerinax", name = "postgresql"}
 ]
 modules = [
-	{org = "dumindusameendra", packageName = "test_decompile", moduleName = "test_decompile"}
+	{org = "dumindusameendra", packageName = "postgres_transaction_test", moduleName = "postgres_transaction_test"}
 ]
 

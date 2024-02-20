@@ -101,7 +101,7 @@ public function main() returns error? {
 
     TestTask[] tasks = [task1, task2, task3, task4, task5, task6, task7, task8, task9, task10];
 
-    decimal interval = 15; // adjust to change error occurrence speed
+    decimal interval = 0.001; // adjust to change error occurrence speed
     // task1.schedule(interval);
     // task2.schedule(interval);
     // task3.schedule(interval);

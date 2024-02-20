@@ -1,0 +1,23 @@
+[package]
+org = "dumindusameendra"
+name = "postgres_transaction_test"
+version = "0.1.0"
+distribution = "2201.8.4"
+
+[build-options]
+observabilityIncluded = true
+
+# [[platform.java17.dependency]]
+# artifactId = "h2"
+# version = "2.0.206"
+# groupId = "com.h2database"
+
+# [[platform.java17.dependency]]
+# groupId = "org.postgresql"
+# artifactId = "postgresql"
+# version = "42.7.1"
+
+[[platform.java17.dependency]]
+groupId = "io.debezium"
+artifactId = "debezium-connector-postgres"
+version = "2.5.1.Final"
