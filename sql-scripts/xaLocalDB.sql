@@ -1,0 +1,29 @@
+CREATE DATABASE m1;
+DROP TABLE m1.test1;
+
+CREATE TABLE m1.test1 (
+  id INT NOT NULL AUTO_INCREMENT,
+  hello VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE m1.test2 (
+  id INT NOT NULL AUTO_INCREMENT,
+  hello VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+
+CREATE DATABASE xaLocalDB;
+
+CREATE TABLE xaLocalDB.xaTesting (
+  id INT NOT NULL AUTO_INCREMENT,
+  hello VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+SELECT * FROM xalocaldb.xatesting;
+
+XA RECOVER;
+
+INSERT INTO xaLocalDB.xaTesting (id, hello) VALUES (1, 'brooo');

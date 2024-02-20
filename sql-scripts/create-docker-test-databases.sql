@@ -27,3 +27,6 @@ CREATE TABLE m3.test6 (
   hello VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
 );
+
+
+INSERT INTO m2.test3 (id, hello) VALUES (8, 'hi');
