@@ -1,0 +1,10 @@
+[package]
+org = "dumindusameendra"
+name = "test_code_concurrent_trans"
+version = "0.1.0"
+distribution = "2201.8.5"
+
+[[platform.java11.dependency]]
+artifactId="sqlite-jdbc"
+version="3.36.0.1"
+groupId="org.xerial"

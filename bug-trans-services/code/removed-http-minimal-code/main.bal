@@ -28,7 +28,7 @@ public function main() returns error? {
 }
 
 transactional function callRemoteService() returns error? {
-    sql:ExecutionResult execResult = check testDB->execute(`INSERT INTO test (hello) VALUES ('world')`);
+    sql:ExecutionResult execResult = check testDB->execute(`INSERT INTO test (hello) VALUES ('nuvindufinaleeefinalRelease')`);
     io:println("Affected row count: ", execResult.affectedRowCount);
     io:println("Inserted ID: ", execResult.lastInsertId);
 }

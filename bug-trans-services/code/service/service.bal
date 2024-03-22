@@ -18,7 +18,7 @@ type WorldRecord record {|
 
 service / on new http:Listener(9090) {
     private mysql:Client testDB;
-    // private jdbc:Client testDB;
+    // private  ;
     function init() returns error? {
         self.testDB = check new (host = "localhost",
             user = "root", password = "my-secret-pw",

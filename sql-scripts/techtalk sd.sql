@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `techtalk`.`Payments` (
 );
 
 
--- DROP TABLE `techtalk`.`Payments`;
+DROP TABLE `techtalk`.`Payments`;
 
 INSERT INTO `techtalk`.`Payments`
 (`cardno`, `amount`)
