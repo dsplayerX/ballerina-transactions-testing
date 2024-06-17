@@ -7,17 +7,17 @@ import ballerinax/mysql;
 import ballerinax/mysql.driver as _;
 
 sql:ConnectionPool pool = {
-    maxOpenConnections: 5,
+    maxOpenConnections: 1,
     maxConnectionLifeTime: 30,
     minIdleConnections: 0
 };
 
-final http:Client asdClient = check new http:Client("http://localhost:9096");
+// final http:Client asdClient = check new http:Client("http://localhost:9096");
 
 // final jdbc:Client testDB = check new jdbc:Client("jdbc:sqlite:test.db", connectionPool = pool);
 
 final mysql:Client testDB = check new (
-    host = "localhost", user = "root", password = "root", port = 3306, database = "test", connectionPool = pool
+    host = "localhost", user = "root", password = "root@123", port = 3306, database = "test", connectionPool = pool
 );
 
 type WorldRecord record {|
@@ -25,7 +25,7 @@ type WorldRecord record {|
 |};
 
 // set simulationError to true to get different stacktrace
-public isolated function dbTest(boolean simulateError = true) returns error? {
+public isolated function dbTest(boolean simulateError = false) returns error? {
     transaction {
         stream<WorldRecord, error?> result = testDB->query(`SELECT world FROM hello;`);
         check result.close();
