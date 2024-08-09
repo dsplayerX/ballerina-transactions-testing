@@ -1,0 +1,6 @@
+[ballerina.log]
+level = "DEBUG"
+
+[ballerina.lang.transaction]
+transactionAutoCommitTimeout=1800
+transactionCleanupTimeout=5000
